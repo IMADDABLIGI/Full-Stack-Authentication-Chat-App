@@ -12,7 +12,7 @@ function Login() {
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
     
-    const connectSocket = () => {
+    const createSocket = () => {
         const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
         userSocket.onopen = function() {
             // console.log('WebSocket connection established');
@@ -33,7 +33,7 @@ function Login() {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 setUser(username);
-                connectSocket();
+                createSocket();
                 navigate("/");
             }
         } catch (err) {
