@@ -5,6 +5,7 @@ class ApiConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
         await self.send(text_data=json.dumps({
+            'type': "Auth",
             'message': "Connection Established!"
         }))
 
@@ -18,5 +19,6 @@ class ApiConsumer(AsyncWebsocketConsumer):
         message = data.get("message")
         print("DATA : ", message)
         await self.send(text_data=json.dumps({
+            'type': "Chat",
             'message': message
         }))
