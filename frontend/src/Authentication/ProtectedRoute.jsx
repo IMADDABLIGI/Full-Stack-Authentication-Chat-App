@@ -19,9 +19,9 @@ export const ProtectedRoute = ({ child }) => {
             socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 // if (data.type === "Auth")
+                // if (data.type === "Chat")
                 console.log('Message from server:', data.message);
-                if (data.type === "Chat")
-                    setMessages(prevMsg => [...prevMsg, data.message]) //to use the most recent value of messages bcs useEffect may result in outdated values.
+                setMessages(prevMsg => [...prevMsg, data.message]) //to use the most recent value of messages bcs useEffect may result in outdated values.
             };
         }
     },[socket])
