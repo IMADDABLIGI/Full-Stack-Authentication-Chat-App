@@ -11,14 +11,17 @@ export default ProfileContext;
 export const ProtectedRoute = ({ child }) => {
     const [user, setUser] = useState(null);
     const [socket, setSocket] = useState(null);
+    const [messages, setMessages] = useState([]);
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(()=>{
         if (socket){
-            // console.log("Change in socket");
             socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
+                // if (data.type === "Auth")
                 console.log('Message from server:', data.message);
+                if (data.type === "Chat")
+                    setMessages(prevMsg => [...prevMsg, data.message]) //to use the most recent value of messages bcs useEffect may result in outdated values.
             };
         }
     },[socket])
@@ -61,12 +64,11 @@ export const ProtectedRoute = ({ child }) => {
         const checkUrlEnd = () => {
             if (url.endsWith('/'))
                 auth()
-            if(url.endsWith('/login'))
+            if (url.endsWith('/login'))
                 setIsAuthorized(true);
             };
         if (url)
             checkUrlEnd();
-
     }, [window.location.href]);
 
     const userInfoData = {
@@ -74,6 +76,8 @@ export const ProtectedRoute = ({ child }) => {
         setUser,
         socket,
         setSocket,
+        messages, 
+        setMessages
     };
     
     if (isAuthorized === null) {

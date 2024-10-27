@@ -3,7 +3,7 @@ import ProfileContext from '../Authentication/ProtectedRoute';
 
 function Home() {
 
-  const {socket, setSocket} = useContext(ProfileContext);
+  const {socket, setSocket, messages} = useContext(ProfileContext);
 
     const createSocket = (message) => {
       const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
@@ -25,7 +25,7 @@ function Home() {
         else
           socket.send(JSON.stringify({ message }));
       }
-      e.target.reset(); // Reset the form
+      e.target.reset();
     };
   
     return (
@@ -35,6 +35,11 @@ function Home() {
           <input type="text" name="message" />
           <button type="submit">Send</button>
         </form>
+        {messages.map((message, key)=>{
+          return (
+            <p className='messages' key={key}> {message} </p>
+          )
+        })}
       </div>
     );
   }
