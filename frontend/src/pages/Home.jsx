@@ -32,7 +32,7 @@ function Home() {
       <div className='home--page'>
         <h1>Let's chat!</h1>
         <form onSubmit={handleSubmit}>
-          <input type="text" name="message" />
+          <input type="text" name="message" autoFocus/>
           <button type="submit">Send</button>
         </form>
         {messages.map((message, key)=>{

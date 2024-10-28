@@ -29,6 +29,7 @@ function Register() {
                 value={username}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder='UserName...'
+                autoFocus
             />
             <input
                 className='form-input'
