@@ -1,6 +1,6 @@
 import React, { useContext , useState } from 'react'
 import api from '../api'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
+import { USER, ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
 import { Link, useNavigate } from 'react-router-dom'
 import "../styles/Form.css"
 import ProfileContext from './ProtectedRoute'
@@ -30,6 +30,7 @@ function Login() {
         try {
             const res = await api.post('/api/token/', { username, password })
             if (res.status === 200){
+                localStorage.setItem(USER, username);
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 setUser(username);

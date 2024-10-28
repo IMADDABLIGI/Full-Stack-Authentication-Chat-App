@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { Navigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER } from '../constants';
 
 const ProfileContext = createContext();
 
@@ -20,8 +20,8 @@ export const ProtectedRoute = ({ child }) => {
                 const data = JSON.parse(event.data);
                 // if (data.type === "Auth")
                 // if (data.type === "Chat")
-                console.log('Message from server:', data.message);
-                setMessages(prevMsg => [...prevMsg, data.message]) //to use the most recent value of messages bcs useEffect may result in outdated values.
+                console.log(data.sender, ":", data.message);
+                setMessages(prevMsg => [...prevMsg, data]) //to use the most recent value of messages bcs useEffect may result in outdated values.
             };
         }
     },[socket])
@@ -44,6 +44,9 @@ export const ProtectedRoute = ({ child }) => {
         };
         
         const auth = async () => {
+            const username = localStorage.getItem(USER);
+            if (!user && username != 'default')
+                setUser(username);
             const token = localStorage.getItem(ACCESS_TOKEN);
             if (!token) {
                 setIsAuthorized(false);

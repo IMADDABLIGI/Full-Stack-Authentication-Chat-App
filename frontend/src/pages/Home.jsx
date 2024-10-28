@@ -3,13 +3,16 @@ import ProfileContext from '../Authentication/ProtectedRoute';
 
 function Home() {
 
-  const {socket, setSocket, messages} = useContext(ProfileContext);
+  const {socket, setSocket, messages, user} = useContext(ProfileContext);
 
     const createSocket = (message) => {
       const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
       userSocket.onopen = function() {
           setSocket(userSocket)
-          userSocket.send(JSON.stringify({ message }));
+          userSocket.send(JSON.stringify({ 
+            'sender': user,
+            'message':message,
+          }));
       };
       userSocket.onmessage = function(event) {
           const data = JSON.parse(event.data)
@@ -23,11 +26,14 @@ function Home() {
         if (!socket)
           createSocket(message);
         else
-          socket.send(JSON.stringify({ message }));
-      }
+          socket.send(JSON.stringify({ 
+            'sender': user,
+            'message':message,
+          }));
+        }
       e.target.reset();
     };
-  
+
     return (
       <div className='home--page'>
         <h1>Let's chat!</h1>
@@ -37,7 +43,7 @@ function Home() {
         </form>
         {messages.map((message, key)=>{
           return (
-            <p className='messages' key={key}> {message} </p>
+            <p className='messages' key={key}> {message.sender} : {message.message} </p>
           )
         })}
       </div>
