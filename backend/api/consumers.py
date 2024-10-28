@@ -29,11 +29,14 @@ class ApiConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         
         message = data.get("message")
-        print("DATA : ", message)
+        sender = data.get("sender")
+        print("DATA : ", data)
+        # print("DATA : ", sender)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message', #Message Routing: broadcasts the message to all consumers in the specified group.
+                'sender': sender,
                 'message': message
             }
         )
@@ -44,7 +47,9 @@ class ApiConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event): #Message Routing 
         message = event.get('message')
+        sender = event.get("sender")
         await self.send(text_data=json.dumps({
             'type':'chat',
+            'sender': sender,
             'message':message
         }))
