@@ -1,37 +1,39 @@
 from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
 
-class ApiConsumer(WebsocketConsumer):
-    def connect(self):
+class ApiConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
 
         self.room_group_name = 'chat'
-
-        async_to_sync(self.channel_layer.group_add)(
+        await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
-        self.accept()
+        await self.accept()
         # await self.send(text_data=json.dumps({
         #     'type': "Auth",
         #     'message': "Connection Established!"
         # }))
 
-    def disconnect(self, close_code):
-        pass
+    async def disconnect(self, close_code):
+        # pass
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
 
-    def receive(self, text_data):
+    async def receive(self, text_data):
         data = json.loads(text_data)
         
-        print("--------------")
         message = data.get("message")
         print("DATA : ", message)
-
-        async_to_sync(self.channel_layer.group_send)(
+        await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'chat_message',
+                'type': 'chat_message', #Message Routing: broadcasts the message to all consumers in the specified group.
                 'message': message
             }
         )
@@ -40,9 +42,9 @@ class ApiConsumer(WebsocketConsumer):
         #     'message': message
         # }))
 
-    def chat_message(self, event):
+    async def chat_message(self, event): #Message Routing 
         message = event.get('message')
-        self.send(text_data=json.dumps({
+        await self.send(text_data=json.dumps({
             'type':'chat',
             'message':message
         }))
