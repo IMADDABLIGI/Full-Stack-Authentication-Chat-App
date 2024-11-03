@@ -13,7 +13,7 @@ function Login() {
     const [password, setPassword] = useState("")
     
     const createSocket = () => {
-        const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
+        const userSocket = new WebSocket('ws://localhost:8000/ws/api/');
         userSocket.onopen = function() {
             // console.log('WebSocket connection established');
             setSocket(userSocket)
