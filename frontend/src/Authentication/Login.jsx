@@ -28,11 +28,24 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post('/api/token/', { username, password })
-            if (res.status === 200){
-                localStorage.setItem(USER, username);
-                localStorage.setItem(ACCESS_TOKEN, res.data.access);
-                localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+            const res = await fetch("http://localhost:8000/api/token/", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  username: username,
+                  password: password,
+                }),
+                credentials: 'include',
+            });
+
+            // const res = await api.post('/api/token/', { username, password })
+            if (res.ok){
+                const data = await res.json();
+                localStorage.setItem(ACCESS_TOKEN, data.access);
+                console.log(data.access);
+                localStorage.setItem(REFRESH_TOKEN, data.refresh);
                 setUser(username);
                 createSocket();
                 navigate("/");
@@ -40,7 +53,7 @@ function Login() {
         } catch (err) {
             alert(err)
         }
-    }   
+    }
 
     return (
         <form onSubmit={handleSubmit} className='form-container'>

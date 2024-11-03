@@ -11,7 +11,7 @@ function Home() {
           setSocket(userSocket)
           userSocket.send(JSON.stringify({ 
             'sender': user,
-            'message':message,
+            'message': message,
           }));
       };
       userSocket.onmessage = function(event) {
@@ -28,7 +28,7 @@ function Home() {
         else
           socket.send(JSON.stringify({ 
             'sender': user,
-            'message':message,
+            'message': message,
           }));
         }
       e.target.reset();
