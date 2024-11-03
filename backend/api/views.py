@@ -37,12 +37,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # print("ACCESS:", access_token)
         print("Cookie has been created")
         
-        response.set_cookie(
-            key='refresh_token',
-            value=refresh_token,
-            httponly=True,
-            secure=False,  
-            expires=timezone.now() + timedelta(days=7)  # Set expiration
-        )
+        # response.set_cookie(
+        #     key='refresh_token',
+        #     value=refresh_token,
+        #     httponly=True,
+        #     secure=False,  
+        #     expires=timezone.now() + timedelta(days=7)  # Set expiration
+        # )
 
         return response
