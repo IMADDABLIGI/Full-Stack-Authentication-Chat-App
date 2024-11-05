@@ -97,8 +97,12 @@ class CustomTokenRefreshView(TokenRefreshView):
     # return Response(data={'error': 'No access token found in cookies!'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class checkToken(APIView):
-    def post(self, request, format=None):
-        username = request.data['user']
-        print("HELLO USER ", username)
-        return Response(data={"user": username}, status=status.HTTP_200_OK)
+@api_view(["POST"])
+def check_token(request):
+    # You can perform your logic here without needing an authorization token
+    # For example, just respond with the user data passed in the body
+    user = request.data.get('user')
+    if user:
+        return Response(data={"message": f"Hello, {user}!"}, status=status.HTTP_200_OK)
+    else:
+        return Response(data={"error": "No user provided."}, status=status.HTTP_400_BAD_REQUEST)
