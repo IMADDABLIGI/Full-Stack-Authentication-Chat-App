@@ -57,25 +57,32 @@ export const ProtectedRoute = ({ child }) => {
         //     setIsAuthorized(true);
         const auth = async () => {
             try {
-                // const response = await fetch('http://localhost:8000/api/token/checkToken/', {
-                //     method : 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     credentials: 'include',
-                //     body: JSON.stringify({
-                //         user : "IMAD"
-                //     }),
-                // })
-                const response = await api.post("/api/token/checktoken/", { user: "IMAD" });
-                if (response.status === 200) {
-                    // const res = await response.json();
-                    setUser(response.user);
+                const response = await fetch('http://localhost:8000/api/token/checktoken/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include', // Include credentials (cookies)
+                    body: JSON.stringify({
+                        user: "IMAD"
+                    }),
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Response Data:", data);
                     setIsAuthorized(true);
                 } else {
-                    console.error("Unauthorized:", response.status);  // Log unauthorized errors
+                    console.error("Error:", response.status);
                     setIsAuthorized(false);
                 }
+                // const response = await api.post("/api/token/checktoken/", { user: "IMAD" });
+                // if (response.status === 200) {
+                //     // const res = await response.json();
+                //     // setUser(response.user);
+                // } else {
+                //     console.error("Unauthorized:", response.status);  // Log unauthorized errors
+                // }
             } catch (error) {
                 console.log(error);
                 setIsAuthorized(false);

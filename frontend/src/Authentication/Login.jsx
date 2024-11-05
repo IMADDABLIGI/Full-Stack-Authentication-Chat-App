@@ -43,9 +43,9 @@ function Login() {
             // const res = await api.post('/api/token/', { username, password })
             if (res.ok){
                 const data = await res.json();
-                localStorage.setItem(ACCESS_TOKEN, data.access);
+                // localStorage.setItem(ACCESS_TOKEN, data.access);
                 // console.log(data.access);
-                localStorage.setItem(REFRESH_TOKEN, data.refresh);
+                // localStorage.setItem(REFRESH_TOKEN, data.refresh);
                 setUser(username);
                 createSocket();
                 navigate("/");
