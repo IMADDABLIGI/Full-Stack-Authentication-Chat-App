@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { Navigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
-import { ACCESS_TOKEN, REFRESH_TOKEN, USER } from '../constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
 const ProfileContext = createContext();
 
@@ -30,7 +30,7 @@ export const ProtectedRoute = ({ child }) => {
             try {
                 const resp = await api.post("/api/token/refresh/", { refresh: refreshToken });
                 if (resp.status === 200) {
-                    localStorage.setItem(ACCESS_TOKEN, resp.data.access);
+                    // localStorage.setItem(ACCESS_TOKEN, resp.data.access);
                     setIsAuthorized(true);
                 } else {
                     setIsAuthorized(false);
@@ -41,24 +41,45 @@ export const ProtectedRoute = ({ child }) => {
             }
         };
         
-        const auth = async () => {
-            const username = localStorage.getItem(USER);
-            if (!user && username != 'default')
-                setUser(username);
-            const token = localStorage.getItem(ACCESS_TOKEN);
-            if (!token) {
-                setIsAuthorized(false);
-                console.log("No Authorization");
-                return;
-            }
-            const decode = jwtDecode(token);
-            const tokenExpiration = decode.exp; // in seconds
-            const nowDate = Date.now() / 1000;
+        // const token = localStorage.getItem(ACCESS_TOKEN);
+        // if (!token) {
+        //     setIsAuthorized(false);
+        //     console.log("No Authorization");
+        //     return;
+        // }
+        // const decode = jwtDecode(token);
+        // const tokenExpiration = decode.exp; // in seconds
+        // const nowDate = Date.now() / 1000;
 
-            if (tokenExpiration < nowDate)
-                await refreshToken();
-            else
-                setIsAuthorized(true);
+        // if (tokenExpiration < nowDate)
+        //     await refreshToken();
+        // else
+        //     setIsAuthorized(true);
+        const auth = async () => {
+            try {
+                // const response = await fetch('http://localhost:8000/api/token/checkToken/', {
+                //     method : 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     credentials: 'include',
+                //     body: JSON.stringify({
+                //         user : "IMAD"
+                //     }),
+                // })
+                const response = await api.post("/api/token/checktoken/", { user: "IMAD" });
+                if (response.status === 200) {
+                    // const res = await response.json();
+                    setUser(response.user);
+                    setIsAuthorized(true);
+                } else {
+                    console.error("Unauthorized:", response.status);  // Log unauthorized errors
+                    setIsAuthorized(false);
+                }
+            } catch (error) {
+                console.log(error);
+                setIsAuthorized(false);
+            }
         };
 
         const url = window.location.href;

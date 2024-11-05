@@ -1,6 +1,6 @@
 import React, { useContext , useState } from 'react'
 import api from '../api'
-import { USER, ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
 import { Link, useNavigate } from 'react-router-dom'
 import "../styles/Form.css"
 import ProfileContext from './ProtectedRoute'
@@ -44,7 +44,7 @@ function Login() {
             if (res.ok){
                 const data = await res.json();
                 localStorage.setItem(ACCESS_TOKEN, data.access);
-                console.log(data.access);
+                // console.log(data.access);
                 localStorage.setItem(REFRESH_TOKEN, data.refresh);
                 setUser(username);
                 createSocket();
