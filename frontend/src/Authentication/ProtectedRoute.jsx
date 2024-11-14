@@ -25,37 +25,7 @@ export const ProtectedRoute = ({ child }) => {
     },[socket])
 
     useEffect(() => {
-        // const refreshToken = async () => {
-        //     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-        //     try {
-        //         const resp = await api.post("/api/token/refresh/", { refresh: refreshToken });
-        //         if (resp.status === 200) {
-        //             // localStorage.setItem(ACCESS_TOKEN, resp.data.access);
-        //             setIsAuthorized(true);
-        //         } else {
-        //             setIsAuthorized(false);
-        //         }
-        //     } catch (err) {
-        //         console.log(err);
-        //         setIsAuthorized(false);
-        //     }
-        // };
-        
-        // const token = localStorage.getItem(ACCESS_TOKEN);
-        // if (!token) {
-        //     setIsAuthorized(false);
-        //     console.log("No Authorization");
-        //     return;
-        // }
-        // const decode = jwtDecode(token);
-        // const tokenExpiration = decode.exp; // in seconds
-        // const nowDate = Date.now() / 1000;
-
-        // if (tokenExpiration < nowDate)
-        //     await refreshToken();
-        // else
-        //     setIsAuthorized(true);
-        const auth = async () => {
+        const checkToken = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/token/checktoken/', {
                     method: 'GET',
@@ -70,18 +40,16 @@ export const ProtectedRoute = ({ child }) => {
                 
                 const res = await response.json();
                 if (response.ok) {
-                    console.log("Response Data:", res.message);
+                    console.log("Response Data: ", res.message);
                     setIsAuthorized(true);
                 } else {
                     console.error("Error:", res.error);
                     setIsAuthorized(false);
                 }
                 // const response = await api.post("/api/token/checktoken/");
-                // if (response.status === 200) {
-                //     console.log("Response Data:", response.data);
+                // if (response.status === 200)
                 //     setIsAuthorized(true);
-                // }
-                //     else 
+                // else 
                 //     setIsAuthorized(false);
 
             } catch (error) {
@@ -93,7 +61,7 @@ export const ProtectedRoute = ({ child }) => {
         const url = window.location.href;
         const checkUrlEnd = () => {
             if (url.endsWith('/'))
-                auth()
+                checkToken()
             if (url.endsWith('/login'))
                 setIsAuthorized(true);
             };
