@@ -29,13 +29,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         access_token = response.data['access']
         refresh_token = response.data['refresh']
         
-        # Set cookies for access and refresh tokens
         response.set_cookie(
             key='access_token',
             value=access_token,
             httponly=True,  # Prevents JavaScript access
             secure=False,    # Use True in production (HTTPS)
-            expires=timezone.now() + timedelta(days=7)  # Set expiration
+            expires=timezone.now() + timedelta(days=1)  # Set expiration
         )
         
         response.set_cookie(
@@ -43,66 +42,102 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             value=refresh_token,
             httponly=True,
             secure=False,  
-            expires=timezone.now() + timedelta(days=7)  # Set expiration
+            expires=timezone.now() + timedelta(days=1)  # Set expiration
         )
 
         return response
     
-class CustomTokenRefreshView(TokenRefreshView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+# class CustomTokenRefreshView(TokenRefreshView):
+#     def post(self, request, *args, **kwargs):
+#         response = super().post(request, *args, **kwargs)
         
-        # Extract the new access token
-        new_access_token = response.data['access']
+#         # Extract the new access token
+#         new_access_token = response.data['access']
         
-        # Update the access token cookie
-        response.set_cookie(
-            key='access_token',
-            value=new_access_token,
-            httponly=True,
-            secure=True,
-            samesite='Lax',
-            expires=timezone.now() + timedelta(days=7)
-        )
+#         # Update the access token cookie
+#         response.set_cookie(
+#             key='access_token',
+#             value=new_access_token,
+#             httponly=True,
+#             secure=True,
+#             samesite='Lax',
+#             expires=timezone.now() + timedelta(days=7)
+#         )
 
-        return response
-    
+#         return response
+
+
+@api_view(["GET"])
+def check_token(request):
+    access_token = request.COOKIES.get('access_token')
+    refresh_token = request.COOKIES.get('refresh_token')
+    if not access_token or not refresh_token:
+        return Response(data={"error": "No Token provided."}, status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        decode_token = AccessToken(access_token) #decodes the token and validates it.
+        data = decode_token.payload
+        user_id = data.get('user_id')
+        # user_id = decode_token.get('user_id')
+        print("########")
+        print("User :", user_id)
+        user = User.objects.filter(id=user_id).first()
+        if user:
+            return Response(data={"message": f"Hello, {user.username}!"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print("Token decoding error:", e)
+        # access token is invalid, check for the refresh token
+        try:
+            refresh_decoded = RefreshToken(refresh_token)
+            new_access_token = str(refresh_decoded.access_token) # Generate a new access token
+            response = Response(data={"message": "New access token generated."}, status=status.HTTP_200_OK)
+            response.set_cookie(
+                key='access_token',
+                value=new_access_token,
+                httponly=True,
+                secure=False,
+                expires=timezone.now() + timedelta(days=1)  # Set expiration
+            )
+            return response
+        except Exception as e:
+            print("Refresh token error:", e)
+            return Response(data={"error": "Invalid refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
+            
+    return Response(data={"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 # @api_view(["GET"])
 # def check_token(request):
-#     # Access the access_token from cookies
 #     access_token = request.COOKIES.get('access_token')
+#     refresh_token = request.COOKIES.get('refresh_token')
 
+#     # Step 1: Check if access token is present
 #     if not access_token:
 #         return Response(data={"error": "No access token provided."}, status=status.HTTP_401_UNAUTHORIZED)
 
 #     try:
-#         # Decode the token to validate it
-#         decode_token = AccessToken(access_token)
-#         user_id = decode_token['user_id']  # Access user_id from the token payload
+#         # Step 2: Validate the access token
+#         decode_token = AccessToken(access_token) #decodes the token and validates it.
+#         user_id = decode_token['user_id']  # Direct access to user_id
 
-#         return Response(data={"user": user_id}, status=status.HTTP_200_OK)
+#         # Step 3: Fetch the user
+#         user = User.objects.filter(id=user_id).first()
+#         if user:
+#             return Response(data={"message": f"Hello, {user.username}!"}, status=status.HTTP_200_OK)
+    
 #     except Exception as e:
 #         print("Token decoding error:", e)
-#         return Response(data={"error": "Invalid access token."}, status=status.HTTP_401_UNAUTHORIZED)
-    # token = request.COOKIES.get('access_token')
-    # decoded_token = AccessToken(token)
-    # data = decoded_token.payload
-    # user_id = data.get('user_id')
-    # print("########")
-    # print("User :", user_id)
-    # user = User.objects.filter(id=user_id).first()
-    # if user is not None:
-    #     return Response(data={"user": user.username}, status=status.HTTP_200_OK)
-    # return Response(data={'error': 'No access token found in cookies!'}, status=status.HTTP_400_BAD_REQUEST)
+#         # If the access token is invalid, check for the refresh token
+#         if refresh_token:
+#             try:
+#                 # Step 4: Validate the refresh token and generate a new access token
+#                 refresh = RefreshToken(refresh_token)
+#                 new_access_token = str(refresh.access_token)  # Generate a new access token
+                
+#                 # Set the new access token in the cookies
+#                 response = Response(data={"message": "New access token generated."}, status=status.HTTP_200_OK)
+#                 response.set_cookie(key='access_token', value=new_access_token, httponly=True)  # Store securely
+#                 return response
+#             except Exception as e:
+#                 print("Refresh token error:", e)
+#                 return Response(data={"error": "Invalid refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
 
-
-@api_view(["POST"])
-def check_token(request):
-    # You can perform your logic here without needing an authorization token
-    # For example, just respond with the user data passed in the body
-    user = request.data.get('user')
-    if user:
-        return Response(data={"message": f"Hello, {user}!"}, status=status.HTTP_200_OK)
-    else:
-        return Response(data={"error": "No user provided."}, status=status.HTTP_400_BAD_REQUEST)
+#     return Response(data={"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
