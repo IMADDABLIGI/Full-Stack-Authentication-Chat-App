@@ -44,28 +44,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             secure=False,  
             expires=timezone.now() + timedelta(days=1)  # Set expiration
         )
-
         return response
-    
-# class CustomTokenRefreshView(TokenRefreshView):
-#     def post(self, request, *args, **kwargs):
-#         response = super().post(request, *args, **kwargs)
-        
-#         # Extract the new access token
-#         new_access_token = response.data['access']
-        
-#         # Update the access token cookie
-#         response.set_cookie(
-#             key='access_token',
-#             value=new_access_token,
-#             httponly=True,
-#             secure=True,
-#             samesite='Lax',
-#             expires=timezone.now() + timedelta(days=7)
-#         )
-
-#         return response
-
 
 @api_view(["GET"])
 def check_token(request):
@@ -77,18 +56,16 @@ def check_token(request):
         decode_token = AccessToken(access_token) #decodes the token and validates it.
         data = decode_token.payload
         user_id = data.get('user_id')
-        # user_id = decode_token.get('user_id')
-        print("########")
-        print("User :", user_id)
         user = User.objects.filter(id=user_id).first()
         if user:
             return Response(data={"message": f"Hello, {user.username}!"}, status=status.HTTP_200_OK)
     except Exception as e:
-        print("Token decoding error:", e)
+        print("Token decoding error:", e, ". Starting generating new access token")
         # access token is invalid, check for the refresh token
         try:
             refresh_decoded = RefreshToken(refresh_token)
             new_access_token = str(refresh_decoded.access_token) # Generate a new access token
+            
             response = Response(data={"message": "New access token generated."}, status=status.HTTP_200_OK)
             response.set_cookie(
                 key='access_token',
@@ -98,46 +75,9 @@ def check_token(request):
                 expires=timezone.now() + timedelta(days=1)  # Set expiration
             )
             return response
+
         except Exception as e:
             print("Refresh token error:", e)
             return Response(data={"error": "Invalid refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
             
     return Response(data={"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-
-# @api_view(["GET"])
-# def check_token(request):
-#     access_token = request.COOKIES.get('access_token')
-#     refresh_token = request.COOKIES.get('refresh_token')
-
-#     # Step 1: Check if access token is present
-#     if not access_token:
-#         return Response(data={"error": "No access token provided."}, status=status.HTTP_401_UNAUTHORIZED)
-
-#     try:
-#         # Step 2: Validate the access token
-#         decode_token = AccessToken(access_token) #decodes the token and validates it.
-#         user_id = decode_token['user_id']  # Direct access to user_id
-
-#         # Step 3: Fetch the user
-#         user = User.objects.filter(id=user_id).first()
-#         if user:
-#             return Response(data={"message": f"Hello, {user.username}!"}, status=status.HTTP_200_OK)
-    
-#     except Exception as e:
-#         print("Token decoding error:", e)
-#         # If the access token is invalid, check for the refresh token
-#         if refresh_token:
-#             try:
-#                 # Step 4: Validate the refresh token and generate a new access token
-#                 refresh = RefreshToken(refresh_token)
-#                 new_access_token = str(refresh.access_token)  # Generate a new access token
-                
-#                 # Set the new access token in the cookies
-#                 response = Response(data={"message": "New access token generated."}, status=status.HTTP_200_OK)
-#                 response.set_cookie(key='access_token', value=new_access_token, httponly=True)  # Store securely
-#                 return response
-#             except Exception as e:
-#                 print("Refresh token error:", e)
-#                 return Response(data={"error": "Invalid refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
-
-#     return Response(data={"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)

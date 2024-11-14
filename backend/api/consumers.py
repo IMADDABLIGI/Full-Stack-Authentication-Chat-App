@@ -18,9 +18,7 @@ class ApiConsumer(AsyncWebsocketConsumer):
             payload_data = decode_token.payload
             user_id = payload_data.get('user_id')
 
-            # Store user_id in the instance for later use
-            self.user_id = user_id
-            print("####### Instance ID:", self.user_id)
+            self.user_id = user_id # Store user_id in the instance for later use
             self.room_group_name = 'chat'
 
             # Join the room group
@@ -28,19 +26,24 @@ class ApiConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 self.channel_name
             )
-
             await self.accept()
 
         except Exception as e:
             print("Error decoding token:", e)
             await self.close()  # Close the connection on error
 
+    async def disconnect(self, close_code):
+        # pass
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
     async def receive(self, text_data):
         data = json.loads(text_data)
         
         message = data.get("message")
         sender = data.get("sender")
-        # print("DATA : ", data)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
