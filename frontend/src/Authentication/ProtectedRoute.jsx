@@ -25,21 +25,21 @@ export const ProtectedRoute = ({ child }) => {
     },[socket])
 
     useEffect(() => {
-        const refreshToken = async () => {
-            const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-            try {
-                const resp = await api.post("/api/token/refresh/", { refresh: refreshToken });
-                if (resp.status === 200) {
-                    // localStorage.setItem(ACCESS_TOKEN, resp.data.access);
-                    setIsAuthorized(true);
-                } else {
-                    setIsAuthorized(false);
-                }
-            } catch (err) {
-                console.log(err);
-                setIsAuthorized(false);
-            }
-        };
+        // const refreshToken = async () => {
+        //     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        //     try {
+        //         const resp = await api.post("/api/token/refresh/", { refresh: refreshToken });
+        //         if (resp.status === 200) {
+        //             // localStorage.setItem(ACCESS_TOKEN, resp.data.access);
+        //             setIsAuthorized(true);
+        //         } else {
+        //             setIsAuthorized(false);
+        //         }
+        //     } catch (err) {
+        //         console.log(err);
+        //         setIsAuthorized(false);
+        //     }
+        // };
         
         // const token = localStorage.getItem(ACCESS_TOKEN);
         // if (!token) {
@@ -58,31 +58,32 @@ export const ProtectedRoute = ({ child }) => {
         const auth = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/token/checktoken/', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include', // Include credentials (cookies)
-                    body: JSON.stringify({
-                        user: "IMAD"
-                    }),
+                    // body: JSON.stringify({
+                    //     user: "IMAD"
+                    // }),
                 });
                 
+                const res = await response.json();
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log("Response Data:", data);
+                    console.log("Response Data:", res.message);
                     setIsAuthorized(true);
                 } else {
-                    console.error("Error:", response.status);
+                    console.error("Error:", res.error);
                     setIsAuthorized(false);
                 }
-                // const response = await api.post("/api/token/checktoken/", { user: "IMAD" });
+                // const response = await api.post("/api/token/checktoken/");
                 // if (response.status === 200) {
-                //     // const res = await response.json();
-                //     // setUser(response.user);
-                // } else {
-                //     console.error("Unauthorized:", response.status);  // Log unauthorized errors
+                //     console.log("Response Data:", response.data);
+                //     setIsAuthorized(true);
                 // }
+                //     else 
+                //     setIsAuthorized(false);
+
             } catch (error) {
                 console.log(error);
                 setIsAuthorized(false);
