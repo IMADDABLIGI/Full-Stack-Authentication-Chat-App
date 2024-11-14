@@ -1,7 +1,9 @@
 from channels.generic.websocket import WebsocketConsumer
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from django.contrib.auth.models import User
 from asgiref.sync import async_to_sync
+from asgiref.sync import sync_to_async
 from rest_framework_simplejwt.tokens import AccessToken
 
 class ApiConsumer(AsyncWebsocketConsumer):
@@ -41,27 +43,41 @@ class ApiConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        
-        message = data.get("message")
-        sender = data.get("sender")
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message', #Message Routing: broadcasts the message to all consumers instances in the specified group.
-                'sender': sender,
-                'message': message
-            }
-        )
+
+        cookies = self.scope.get("cookies")
+        token = cookies.get("access_token")
+
+        try:
+            decoded_token = AccessToken(token)
+            payload = decoded_token.payload
+            user_id = payload.get("user_id")
+            user = await sync_to_async(User.objects.filter(id=user_id).first)()
+
+            if user:
+                message = data.get("message")
+                sender = user.username
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'chat_message', #Message Routing: broadcasts the message to all consumers instances in the specified group.
+                        'sender': sender,
+                        'message': message
+                    }
+                )
+        except Exception as e:
+            print("Error :", e)
+            pass
+
         # await self.send(text_data=json.dumps({
         #     'type': "Chat",
         #     'message': message
         # }))
 
-    async def chat_message(self, event): #Message Routing 
-        sender = event.get("sender")
+    async def chat_message(self, event): #Message Routing
+        sender = event.get('sender')
         message = event.get('message')
         await self.send(text_data=json.dumps({
             'type': 'chat',
             'sender': sender,
             'message': message
-        }))
+                }))
