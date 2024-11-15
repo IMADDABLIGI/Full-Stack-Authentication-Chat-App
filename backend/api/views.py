@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from .serializers import UserSerializer
 from rest_framework import generics
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -58,7 +59,9 @@ def check_token(request):
         user_id = data.get('user_id')
         user = User.objects.filter(id=user_id).first()
         if user:
-            return Response(data={"message": f"Hello, {user.username}!"}, status=status.HTTP_200_OK)
+            user_serializer = UserSerializer(user)
+            print("##### DATA : ", user_serializer.data)
+            return Response(data={"data": user_serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         print("Token decoding error:", e, ". Starting generating new access token")
         # access token is invalid, check for the refresh token
