@@ -6,7 +6,7 @@ import "../styles/Form.css"
 import ProfileContext from './ProtectedRoute'
 
 function Login() {
-    const {setUser, setSocket} = useContext(ProfileContext);
+    const {setSocket} = useContext(ProfileContext);
 
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
@@ -46,7 +46,6 @@ function Login() {
                 // localStorage.setItem(ACCESS_TOKEN, data.access);
                 // console.log(data.access);
                 // localStorage.setItem(REFRESH_TOKEN, data.refresh);
-                setUser(username);
                 createSocket();
                 navigate("/");
             }

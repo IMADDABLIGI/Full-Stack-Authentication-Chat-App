@@ -40,7 +40,8 @@ export const ProtectedRoute = ({ child }) => {
                 
                 const res = await response.json();
                 if (response.ok) {
-                    console.log("Response Data: ", res.message);
+                    // console.log("Response Data: ", res.data);
+                    setUser(res.data.username);
                     setIsAuthorized(true);
                 } else {
                     console.error("Error:", res.error);

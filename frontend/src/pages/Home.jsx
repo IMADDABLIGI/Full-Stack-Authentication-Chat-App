@@ -1,16 +1,19 @@
 import React, { useContext } from 'react'
 import ProfileContext from '../Authentication/ProtectedRoute';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
 
   const {socket, setSocket, messages, user} = useContext(ProfileContext);
+  const navigate = useNavigate();
 
     const createSocket = (message) => {
       const userSocket = new WebSocket('ws://127.0.0.1:8000/ws/api/');
+      if (!userSocket.onopen)
+        navigate("/login")
       userSocket.onopen = function() {
           setSocket(userSocket)
-          userSocket.send(JSON.stringify({ 
-            'sender': user,
+          userSocket.send(JSON.stringify({
             'message': message,
           }));
       };
@@ -26,8 +29,7 @@ function Home() {
         if (!socket)
           createSocket(message);
         else
-          socket.send(JSON.stringify({ 
-            'sender': user,
+          socket.send(JSON.stringify({
             'message': message,
           }));
         }
