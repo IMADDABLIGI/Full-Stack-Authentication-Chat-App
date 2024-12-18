@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import api from '../api';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
@@ -12,7 +12,8 @@ export const ProtectedRoute = ({ child }) => {
     const [user, setUser] = useState(null);
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [isAuthorized, setIsAuthorized] = useState(null);
+    // const [isAuthorized, setIsAuthorized] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         if (socket){
@@ -42,20 +43,18 @@ export const ProtectedRoute = ({ child }) => {
                 if (response.ok) {
                     // console.log("Response Data: ", res.data);
                     setUser(res.data.username);
-                    setIsAuthorized(true);
                 } else {
-                    console.error("Error:", res.error);
-                    setIsAuthorized(false);
+                    // console.error("Error:", res.error);
+                    navigate("/login");
                 }
                 // const response = await api.post("/api/token/checktoken/");
                 // if (response.status === 200)
-                //     setIsAuthorized(true);
-                // else 
-                //     setIsAuthorized(false);
+                // else
+                // navigate("/login");
 
             } catch (error) {
-                console.log(error);
-                setIsAuthorized(false);
+                // console.log(error);
+                navigate("/login");
             }
         };
 
@@ -63,8 +62,6 @@ export const ProtectedRoute = ({ child }) => {
         const checkUrlEnd = () => {
             if (url.endsWith('/'))
                 checkToken()
-            if (url.endsWith('/login'))
-                setIsAuthorized(true);
             };
         if (url)
             checkUrlEnd();
@@ -79,12 +76,9 @@ export const ProtectedRoute = ({ child }) => {
         setMessages
     };
     
-    if (isAuthorized === null) {
-        return <div style={{color:"white"}}> Loading... </div>;
-    }
     return (
-        <ProfileContext.Provider value={userInfoData}>
-            {isAuthorized ? child : <Navigate to={"/login"} />}
+        <ProfileContext.Provider value={userInfoData}> 
+            {child} 
         </ProfileContext.Provider>
     );
 }

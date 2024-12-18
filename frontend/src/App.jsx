@@ -7,7 +7,7 @@ import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 
 function Logout() {
-  localStorage.clear()
+  // localStorage.clear()
   return <Navigate to="/login" />
 }
 

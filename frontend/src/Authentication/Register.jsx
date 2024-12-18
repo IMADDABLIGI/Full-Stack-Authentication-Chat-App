@@ -7,7 +7,7 @@ function Register() {
     const navigate = useNavigate();
     const [username, setUserName] = useState("")
     const [password, setPassword] = useState("")
-    localStorage.clear()
+    // localStorage.clear()
     
     const handleSubmit = async (e) => {
         e.preventDefault();
