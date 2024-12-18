@@ -7,6 +7,7 @@ import ProfileContext from "./ProtectedRoute";
 import bg1 from "../assets/bg-pictures/image1.png";
 import bg3 from "../assets/bg-pictures/image3.png";
 import bg4 from "../assets/bg-pictures/image4.png";
+import "../index.css"
 
 function Login() {
   const { setSocket } = useContext(ProfileContext);
@@ -65,34 +66,40 @@ function Login() {
       {/* <form onSubmit={handleSubmit} className='form-container'> */}
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center w-[400px] rounded-[10px] border border-gray-300 bg-gray-300 bg-opacity-50 px-[25px] py-[50px] shadow-xl"
+        className="flex flex-col items-center w-[500px] rounded-[10px] border border-gray-300 bg-gray-300 bg-opacity-50 px-[25px] py-[65px] shadow-xl"
       >
         <h1 className="ml-[20px] self-start text-3xl font-bold mb-1"> Welcome Back </h1>
         <h3 className="ml-[20px] self-start text-xl mb-9 text-gray-500 "> Please enter your details </h3>
 
+        <h3 className="ml-[20px] self-start text-xl text-gray-500 "> Email address </h3>
         <input
-          className="form-input"
+          className="w-[90%] p-[10px] my-[10px] border border-gray-300 rounded-md focus:border-red-600 transition-colors"
           type="text"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
-          placeholder="UserName..."
           autoFocus
         />
+        <h3 className="ml-[20px] self-start text-xl text-gray-500 "> Password </h3>
         <input
-          className="form-input"
+          className="w-[90%] p-[10px] mt-[10px] border border-gray-300 rounded-md "
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password..."
         />
-        <button className="form-button" type="submit">
-          {" "}
-          Sign In{" "}
+        <Link className="mr-[20px] self-end text-lg text-primary border-b-[.7px] border-gray-500 "> Forgot password </Link>
+
+        <button className="w-[95%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-xl" type="submit">
+            Sign in
         </button>
-        <Link className="form-register" to="/register">
-          {" "}
-          Sign Up{" "}
-        </Link>
+        <div className="w-[95%] p-[10px] mt-[25px] border border-primary rounded-md text-xl items-center justify-center" type="submit">
+          <p className="text-center">
+            Sign with Google
+          </p>
+        </div>
+        <div className="w-[95] flex justify-center gap-2 mt-3">
+          <p className="text-lg text-gray-500"> Don't have an account? </p>
+          <Link to="/register" className="text-lg text-primary border-b-[.7px] border-primary pb-0"> Sign up </Link>
+        </div>
       </form>
     </div>
   );
