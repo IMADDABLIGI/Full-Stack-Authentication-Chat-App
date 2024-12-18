@@ -55,7 +55,7 @@ def check_token(request):
         return Response(data={"error": "No Token provided."}, status=status.HTTP_401_UNAUTHORIZED)
     try:
         decode_token = AccessToken(access_token) #decodes the token and validates it.
-        data = decode_token.payload
+        data = decode_token.payload #To get user dictionaru of data stores on token.
         user_id = data.get('user_id')
         user = User.objects.filter(id=user_id).first()
         if user:
