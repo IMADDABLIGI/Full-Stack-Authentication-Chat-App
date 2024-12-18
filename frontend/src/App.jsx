@@ -1,25 +1,30 @@
-import { React } from 'react'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import {ProtectedRoute} from './Authentication/ProtectedRoute';
-import Login from "./Authentication/Login"
-import Register from "./Authentication/Register"
-import Home from "./pages/Home"
-import NotFound from "./pages/NotFound"
+import { React } from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import { ProtectedRoute } from "./Authentication/ProtectedRoute";
+import Login from "./Authentication/Login";
+import Register from "./Authentication/Register";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
+import "./index.css";
 
 function Logout() {
   // localStorage.clear()
-  return <Navigate to="/login" />
+  return <Navigate to="/login" />;
 }
 
 const route = createBrowserRouter([
   {
     path: "/",
     element: <ProtectedRoute child={<Home />} />,
-    errorElement : <NotFound />
+    errorElement: <NotFound />,
   },
   {
     path: "/login",
-    element: <ProtectedRoute child={<Login />}/>,
+    element: <ProtectedRoute child={<Login />} />,
   },
   {
     path: "/register",
@@ -27,16 +32,12 @@ const route = createBrowserRouter([
   },
   {
     path: "/logout",
-    element: <Logout />
+    element: <Logout />,
   },
-  
-])
+]);
 
 function App() {
-  return (
-    <RouterProvider router={route} />
-  );
+  return <RouterProvider router={route} />;
 }
 
 export default App;
-
