@@ -48,15 +48,15 @@ export const ProtectedRoute = ({ child }) => {
           setUser(res.data.username);
         } else {
           // console.error("Error:", res.error);
-          navigate("/login");
+          navigate("/signin");
         }
         // const response = await api.post("/api/token/checktoken/");
         // if (response.status === 200)
         // else
-        // navigate("/login");
+        // navigate("/signin");
       } catch (error) {
         // console.log(error);
-        navigate("/login");
+        navigate("/signin");
       }
     };
 

@@ -13,7 +13,7 @@ import "./index.css";
 
 function Logout() {
   // localStorage.clear()
-  return <Navigate to="/login" />;
+  return <Navigate to="/signin" />;
 }
 
 const route = createBrowserRouter([
@@ -23,11 +23,11 @@ const route = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: "/login",
+    path: "/signin",
     element: <ProtectedRoute child={<Login />} />,
   },
   {
-    path: "/register",
+    path: "/signup",
     element: <Register />,
   },
   {

@@ -7,7 +7,6 @@ import ProfileContext from "./ProtectedRoute";
 import bg1 from "../assets/bg-pictures/image1.png";
 import bg3 from "../assets/bg-pictures/image3.png";
 import bg4 from "../assets/bg-pictures/image4.png";
-import "../index.css"
 
 function Login() {
   const { setSocket } = useContext(ProfileContext);
@@ -63,7 +62,6 @@ function Login() {
       className="flex h-[100svh] items-center justify-center bg-center bg-cover"
       style={{ backgroundImage: `url(${bg4})` }}
     >
-      {/* <form onSubmit={handleSubmit} className='form-container'> */}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center w-[500px] rounded-[10px] border border-gray-300 bg-gray-300 bg-opacity-50 px-[25px] py-[65px] shadow-xl"
@@ -86,19 +84,21 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Link className="mr-[20px] self-end text-lg text-primary border-b-[.7px] border-gray-500 "> Forgot password </Link>
+        <Link className="mr-[25px] self-end text-lg text-primary border-b-[.7px] border-gray-500 ">
+          Forgot password
+        </Link>
 
-        <button className="w-[95%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-xl" type="submit">
+        <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-xl" type="submit">
             Sign in
         </button>
-        <div className="w-[95%] p-[10px] mt-[25px] border border-primary rounded-md text-xl items-center justify-center" type="submit">
-          <p className="text-center">
-            Sign with Google
+        <div className="w-[90%] p-[10px] mt-[25px] border border-primary rounded-md items-center justify-center" type="submit">
+          <p className="text-center text-xl">
+            Continue with Google
           </p>
         </div>
-        <div className="w-[95] flex justify-center gap-2 mt-3">
+        <div className="flex justify-center gap-2 mt-5">
           <p className="text-lg text-gray-500"> Don't have an account? </p>
-          <Link to="/register" className="text-lg text-primary border-b-[.7px] border-primary pb-0"> Sign up </Link>
+          <Link to="/signup" className="text-lg text-primary border-b-[.7px] border-primary pb-0"> Sign up </Link>
         </div>
       </form>
     </div>
