@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import ProfileContext from "../Authentication/ProtectedRoute";
 import { useNavigate } from "react-router-dom";
+import SideBar from "../sidebar/SideBar";
+import ChatLayout from "../chat/ChatLayout";
 
 function Home() {
   const { socket, setSocket, messages, user } = useContext(ProfileContext);
@@ -37,23 +39,29 @@ function Home() {
     e.target.reset();
   };
 
+
   return (
-    <div className="home--page text-black">
-      <h1 className="text-black">Let's chat!</h1>
-      <form onSubmit={handleSubmit} className="flex gap-5">
-        <input type="text" name="message" className="border border-black w-[100px]" autoFocus />
-        <button type="submit" className= "border-gray-300 border-[5px] rounded w-[100px] bg-blue-500 text-white font-bold" >Send</button>
-      </form>
-      {messages.map((message, key) => {
-        return (
-          <p className="messages" key={key}>
-            {" "}
-            {message.sender} : {message.message}{" "}
-          </p>
-        );
-      })}
+    <div className="flex h-[100svh] w-[100%]">
+      <SideBar />
+      <ChatLayout/>
     </div>
   );
 }
 
 export default Home;
+
+// <div className="home--page text-black">
+//   <h1 className="text-black">Let's chat!</h1>
+//   <form onSubmit={handleSubmit} className="flex gap-5">
+//     <input type="text" name="message" className="border border-black w-[100px]" autoFocus />
+//     <button type="submit" className= "border-gray-300 border-[5px] rounded w-[100px] bg-blue-500 text-white font-bold" >Send</button>
+//   </form>
+//   {messages.map((message, key) => {
+//     return (
+//       <p className="messages" key={key}>
+//         {" "}
+//         {message.sender} : {message.message}{" "}
+//       </p>
+//     );
+//   })}
+// </div>

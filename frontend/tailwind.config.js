@@ -14,6 +14,16 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.flexx': {
+          display: 'flex',
+          'justify-content': 'center',
+          'align-items': 'center',
+        },
+      });
+    },
+  ],
 }
 

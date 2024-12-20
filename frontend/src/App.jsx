@@ -7,8 +7,8 @@ import {
 import { ProtectedRoute } from "./Authentication/ProtectedRoute";
 import Login from "./Authentication/Login";
 import Register from "./Authentication/Register";
-import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
+import Home from "./home/Home";
+import NotFound from "./home/NotFound";
 import "./index.css";
 
 function Logout() {
