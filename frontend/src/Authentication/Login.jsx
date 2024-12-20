@@ -4,9 +4,8 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Form.css";
 import ProfileContext from "./ProtectedRoute";
-import bg1 from "../assets/bg-pictures/image1.png";
-import bg3 from "../assets/bg-pictures/image3.png";
-import bg4 from "../assets/bg-pictures/image4.png";
+import bg4 from "../assets/bg-pictures/image.png";
+import glSvg from "../assets/bg-pictures/google.svg"
 
 function Login() {
   const { setSocket } = useContext(ProfileContext);
@@ -84,21 +83,23 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Link className="mr-[25px] self-end text-[14px] text-primary border-b-[.7px] border-gray-500 ">
+        <Link className="mr-[25px] self-end text-[14px] text-primary border-b-[0.5px] border-gray-500 ">
           Forgot password?
         </Link>
 
-        <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-md" type="submit">
+        <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-[14px] font-bold" type="submit">
             Sign in
         </button>
-        <div className="w-[90%] p-[10px] mt-[10px] border border-primary rounded-md items-center justify-center" type="submit">
-          <p className="text-center text-md">
+        <div className="w-[90%] p-[10px] mt-[10px] flex border border-primary rounded-md items-center justify-center gap-2 bg-gray-400 bg-opacity-35" type="submit">
+          <img src={glSvg} className="w-[18px] h-[18px]"/>
+          <p className="text-[14px] font-bold text-white">
             Continue with Google
           </p>
         </div>
+        
         <div className="flex justify-center gap-2 mt-5">
           <p className="text-md text-gray-500"> Don't have an account? </p>
-          <Link to="/signup" className="text-md text-primary border-b-[.7px] border-primary pb-0"> Sign up </Link>
+          <Link to="/signup" className="text-md text-primary border-b-[0.5px] border-primary pb-0"> Sign up </Link>
         </div>
       </form>
     </div>

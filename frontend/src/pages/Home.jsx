@@ -38,11 +38,11 @@ function Home() {
   };
 
   return (
-    <div className="home--page">
-      <h1>Let's chat!</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="message" autoFocus />
-        <button type="submit">Send</button>
+    <div className="home--page text-black">
+      <h1 className="text-black">Let's chat!</h1>
+      <form onSubmit={handleSubmit} className="flex gap-5">
+        <input type="text" name="message" className="border border-black w-[100px]" autoFocus />
+        <button type="submit" className= "border-gray-300 border-[5px] rounded w-[100px] bg-blue-500 text-white font-bold" >Send</button>
       </form>
       {messages.map((message, key) => {
         return (

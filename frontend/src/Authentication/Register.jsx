@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Form.css";
-import bg1 from "../assets/bg-pictures/image1.png";
-import bg3 from "../assets/bg-pictures/image3.png";
-import bg4 from "../assets/bg-pictures/image4.png";
+import bg4 from "../assets/bg-pictures/image.png";
+import glSvg from "../assets/bg-pictures/google.svg"
 
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  // localStorage.clear()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +43,7 @@ function Register() {
         className="flex flex-col items-center w-[380px] rounded-[10px] border border-gray-300 bg-gray-300 bg-opacity-50 px-[25px] py-[20px] shadow-xl"
       >
       <h1 className="ml-[20px] self-start text-xl font-bold mb-1"> Welcome Back </h1>
-        <h3 className="ml-[20px] self-start text-md mb-7 text-gray-500 "> Please enter your details </h3>
+        <h3 className="ml-[20px] self-start text-md mb-6 text-gray-500 "> Please enter your details </h3>
 
         <h3 className="ml-[20px] self-start text-md text-gray-500 "> Username </h3>
         <input
@@ -68,13 +66,14 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           />
-        <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-md" type="submit">
-          Sign up
-        </button>
 
-        <div className="w-[90%] p-[10px] mt-[10px] border border-primary rounded-md items-center justify-center" type="submit">
-          <p className="text-center text-md">
-          Continue with Google
+        <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-[14px] font-bold" type="submit">
+            Sign in
+        </button>
+        <div className="w-[90%] p-[10px] mt-[10px] flex border border-primary rounded-md items-center justify-center gap-2 bg-gray-400 bg-opacity-35" type="submit">
+          <img src={glSvg} className="w-[18px] h-[18px]"/>
+          <p className="text-[14px] font-bold text-white">
+            Continue with Google
           </p>
         </div>
 
