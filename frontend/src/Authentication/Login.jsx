@@ -47,7 +47,7 @@ function Login() {
       if (res.ok) {
         const data = await res.json();
         // localStorage.setItem(ACCESS_TOKEN, data.access);
-        // console.log(data.access);
+        // console.log(data);
         // localStorage.setItem(REFRESH_TOKEN, data.refresh);
         createSocket();
         navigate("/");

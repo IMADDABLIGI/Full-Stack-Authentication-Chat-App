@@ -15,10 +15,23 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/api/user/register/", { username, password });
-      if (res.status === 201) navigate("/signin");
-    } catch (err) {
-      alert(err);
+      const response = await fetch("http://localhost:8000/api/user/register/",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      })
+      if (response.ok){
+        const data = await response.json();
+        console.log(data);
+        navigate("/signin");
+      }
+    } catch (error) {
+      alert(error);
     }
   };
 
