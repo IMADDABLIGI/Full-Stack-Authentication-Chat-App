@@ -36,6 +36,7 @@ function Conversation(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting...");
+    e.target.reset();
   }
 
   return (
@@ -49,7 +50,7 @@ function Conversation(props) {
           <input 
             type="text" 
             name="message" 
-            className="flex border-none placeholder:text-primary text-2xl w-[80%] h-[40px]" 
+            className="flex placeholder:text-primary text-2xl w-[80%] h-[40px] outline-none focus:border-none" 
             autoFocus
             placeholder='Message...'
           />

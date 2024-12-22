@@ -17,7 +17,7 @@ function Login() {
   const createSocket = () => {
     const userSocket = new WebSocket("ws://localhost:8000/ws/api/");
     userSocket.onopen = function () {
-      // console.log('WebSocket connection established');
+      console.log('WebSocket connection established');
       setSocket(userSocket);
       // userSocket.send(JSON.stringify({ message: 'Hello' }));
     };
@@ -42,12 +42,8 @@ function Login() {
         credentials: "include",
       });
 
-      // const res = await api.post('/api/token/', { username, password })
       if (res.ok) {
         const data = await res.json();
-        // localStorage.setItem(ACCESS_TOKEN, data.access);
-        // console.log(data);
-        // localStorage.setItem(REFRESH_TOKEN, data.refresh);
         createSocket();
         navigate("/");
       }

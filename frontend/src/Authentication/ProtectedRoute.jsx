@@ -12,7 +12,6 @@ export const ProtectedRoute = ({ child }) => {
   const [user, setUser] = useState(null);
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
-  // const [isAuthorized, setIsAuthorized] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,10 +34,7 @@ export const ProtectedRoute = ({ child }) => {
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include", // Include credentials (cookies)
-            // body: JSON.stringify({
-            //     user: "IMAD"
-            // }),
+            credentials: "include",
           },
         );
 
@@ -50,10 +46,6 @@ export const ProtectedRoute = ({ child }) => {
           // console.error("Error:", res.error);
           navigate("/signin");
         }
-        // const response = await api.post("/api/token/checktoken/");
-        // if (response.status === 200)
-        // else
-        // navigate("/signin");
       } catch (error) {
         // console.log(error);
         navigate("/signin");
