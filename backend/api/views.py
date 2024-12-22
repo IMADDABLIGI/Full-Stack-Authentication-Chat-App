@@ -60,7 +60,7 @@ def check_token(request):
         user = User.objects.filter(id=user_id).first()
         if user:
             user_serializer = UserSerializer(user)
-            print("##### DATA : ", user_serializer.data)
+            # print("##### DATA : ", user_serializer.data)
             return Response(data={"data": user_serializer.data}, status=status.HTTP_200_OK)
     except Exception as e:
         print("Token decoding error:", e, ". Starting generating new access token")

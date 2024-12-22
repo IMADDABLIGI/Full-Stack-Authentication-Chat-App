@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from asgiref.sync import async_to_sync
 from asgiref.sync import sync_to_async
 from rest_framework_simplejwt.tokens import AccessToken
+from .models import ChatConvo
+from channels.db import database_sync_to_async
 
 class ApiConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -46,13 +48,22 @@ class ApiConsumer(AsyncWebsocketConsumer):
         
         message = data.get("message")
         sender = data.get("sender")
+        receiver = data.get("receiver")
+        print("#################### ", sender, receiver)
+        # test = await sync_to_async(customuser.objects.filter(id=user_id).first)()
+        user1 = await sync_to_async (User.objects.filter(username=sender).first)()
+        user2 = await sync_to_async (User.objects.filter(username=receiver).first)()
         # print("DATA : ", data)
+        print("#################### ", user1, user2)
+         # Save the message to the ChatConvo model
+        await self.save_message(user1, user2, message)
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message', #Message Routing: broadcasts the message to all consumers instances in the specified group.
-                'sender': sender,
-                'message': message
+                # 'sender': sender,
+                # 'message': message
             }
         )
         # await self.send(text_data=json.dumps({
@@ -61,10 +72,16 @@ class ApiConsumer(AsyncWebsocketConsumer):
         # }))
 
     async def chat_message(self, event): #Message Routing
-        sender = event.get('sender')
-        message = event.get('message')
+        # sender = event.get('sender')
+        # message = event.get('message')
         await self.send(text_data=json.dumps({
             'type': 'chat',
-            'sender': sender,
-            'message': message
-                }))
+            # 'sender': sender,
+            # 'message': message
+            'message': "message 3ndk f DB"
+            }))
+    
+    async def save_message(self, sender, receiver, message):
+        # Save the ChatConvo instance in the database
+        chat_convo = ChatConvo(sender=sender, receiver=receiver, message=message)
+        await database_sync_to_async(chat_convo.save)()  # Save asynchronously
