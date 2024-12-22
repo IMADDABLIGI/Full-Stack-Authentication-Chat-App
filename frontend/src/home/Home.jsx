@@ -6,28 +6,30 @@ import ChatLayout from "../chat/ChatLayout";
 
 function Home() {
   const { socket, setSocket, messages, user } = useContext(ProfileContext);
+  const navigate = useNavigate();
 
-  const createSocket = (message) => {
-    const userSocket = new WebSocket("ws://127.0.0.1:8000/ws/api/");
-    userSocket.onopen = function () {
-      setSocket(userSocket);
-      userSocket.send(
-        JSON.stringify({
-          sender: user,
-          message: message,
-        }),
-      );
-    };
-    userSocket.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      console.log("Message from server:", data.message);
-    };
-  };
+  // const createSocket = (message) => {
+  //   const userSocket = new WebSocket("ws://127.0.0.1:8000/ws/api/");
+  //   userSocket.onopen = function () {
+  //     setSocket(userSocket);
+  //     userSocket.send(
+  //       JSON.stringify({
+  //         sender: user,
+  //         message: message,
+  //       }),
+  //     );
+  //   };
+  //   userSocket.onmessage = function (event) {
+  //     const data = JSON.parse(event.data);
+  //     console.log("Message from server:", data.message);
+  //   };
+  // };
   const handleSubmit = (e) => {
     e.preventDefault();
     const message = e.target.message.value;
     if (message) {
-      if (!socket) createSocket(message);
+      if (!socket)
+        navigate("/signin");
       else
         socket.send(
           JSON.stringify({

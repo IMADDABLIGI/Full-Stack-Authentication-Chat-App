@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Conversation from './Conversation'
 import SearchIcon from '@mui/icons-material/Search';
 import SearchBar from './helpers/SearchBar';
@@ -9,8 +9,11 @@ import avatar2 from "../assets/bg-pictures/user2.png"
 import avatar3 from "../assets/bg-pictures/user4.png"
 import avatar4 from "../assets/bg-pictures/user5.png"
 import { useState } from 'react';
+import ProfileContext from '../Authentication/ProtectedRoute';
 
 function ChatLayout() {
+
+  const {user} = useContext(ProfileContext);
 
   const user1 = {
     userName: "Imad",
@@ -41,7 +44,7 @@ function ChatLayout() {
     time: "11:45",
   }
 
-  const users = [user1, user2, user3, user4];
+  const users = user === "Imad" ? [user2, user3, user4] : [user1, user3, user4];
   const [selectedUser, setSelectedUser] = useState(null);
 
   return (
@@ -54,15 +57,17 @@ function ChatLayout() {
               <ConvoBox
                 key={key}
                 info={user}
-                isSelected={selectedUser === user.userName}
-                onSelect={()=>setSelectedUser(user.userName)}
+                isSelected={selectedUser && selectedUser.userName === user.userName}
+                onSelect={()=>setSelectedUser(user)}
               />
             )
           })}
 
 
         </div>
-        <Conversation info={user1}/>
+        {selectedUser && 
+          <Conversation info={selectedUser}/>
+        }
     </div>
   )
 }

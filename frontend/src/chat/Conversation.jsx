@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import CallIcon from '@mui/icons-material/Call';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import SendIcon from '@mui/icons-material/Send';
+import ProfileContext from '../Authentication/ProtectedRoute';
+import { useNavigate } from 'react-router-dom';
 
 
 const ConvoHeader = (props) => {
@@ -28,37 +30,69 @@ const ConvoHeader = (props) => {
   )
 }
 
-function Conversation(props) {
+  const ConvoSubmit = () => {
+    const iconStyles = {height:"30px", width:"30px"};
+    const {socket, user} = useContext(ProfileContext);
+    const receiver = user === "Imad" ? "Simo": "Imad";
+    const navigate = useNavigate();
 
-  const {info} = props;
-  const iconStyles = {height:"30px", width:"30px"};
+    const handleSubmits = (e) => {
+      e.preventDefault();
+      console.log("Submitting...");
+      e.target.reset();
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting...");
-    e.target.reset();
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const message = e.target.message.value;
+      if (message) {
+        if (!socket)
+          navigate("/signin");
+        else
+          socket.send(
+            JSON.stringify({
+              sender: user,
+              message: message,
+              receiver: receiver,
+            }),
+          );
+      }
+      e.target.reset();
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="flex items-center absolute h-[70px] w-[90%] shadow-lg rounded-2xl border bottom-20 left-1/2 transform -translate-x-1/2 px-6 bg-white gap-5">
+        <CollectionsIcon style={iconStyles} className=' text-primary '/>
+        <EmojiEmotionsIcon style={iconStyles} className=' text-primary '/>
+        <input 
+          type="text" 
+          name="message" 
+          className="flex placeholder:text-primary text-2xl w-[80%] h-[40px] outline-none focus:border-none" 
+          autoFocus
+          placeholder='Message...'
+        />
+        <button type="submit">
+          <SendIcon type="submit" style={iconStyles} className=' ml-auto text-primary'/>
+        </button>
+      </form>
+    )
   }
 
-  return (
-    <div className="flex flex-col border-[2px] border-gray-300 w-[70%] gap-1">
-      <ConvoHeader info={info}/>
-      <div className='flex bg-[#E9FDFF] h-full relative w-[100%]'>
-        
-        <form onSubmit={handleSubmit} className="flex items-center absolute h-[70px] w-[90%] shadow-lg rounded-2xl border bottom-20 left-1/2 transform -translate-x-1/2 px-6 bg-white gap-5">
-          <CollectionsIcon style={iconStyles} className=' text-primary '/>
-          <EmojiEmotionsIcon style={iconStyles} className=' text-primary '/>
-          <input 
-            type="text" 
-            name="message" 
-            className="flex placeholder:text-primary text-2xl w-[80%] h-[40px] outline-none focus:border-none" 
-            autoFocus
-            placeholder='Message...'
-          />
-          <button type="submit">
-            <SendIcon type="submit" style={iconStyles} className=' ml-auto text-primary'/>
-          </button>
-        </form>
+function Conversation(props) {
+  const {info} = props;
+  const msgStyle = "self-end text-white bg-primary px-4 py-1 rounded-2xl text-xl"
+  const msgStyle2 = "self-start text-primary bg-white px-4 py-1 rounded-2xl text-xl"
 
+  return (
+    <div className="flex flex-col border-[2px] border-gray-300 w-[70%] gap-1 justify-center">
+      <ConvoHeader info={info}/>
+      <div className='flex justify-center bg-[#E9FDFF] h-full relative w-[100%] pt-5'>
+        <div className='flex flex-col h-[82%] w-[90%] border border-gray-400 justify-end gap-2'>
+          <p className={`${msgStyle}`}> Hi </p>
+          <p className={`${msgStyle2}`}> Hi, how are u doing </p>
+        </div>
+
+        <ConvoSubmit />
       </div>
 
     </div>
@@ -66,8 +100,3 @@ function Conversation(props) {
 }
 
 export default Conversation
-
-
-// #E9FDFF
-// #D1E8E0
-// #E6F4F1
