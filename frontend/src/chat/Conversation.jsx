@@ -9,12 +9,12 @@ function Conversation(props) {
   const msgStyle = "self-end text-white bg-primary px-4 py-1 rounded-2xl text-xl"
   const msgStyle2 = "self-start text-primary bg-white px-4 py-1 rounded-2xl text-xl"
   const {socket, user} = useContext(ProfileContext);
-
+  const receiver = user === "Imad" ? "Simo": "Imad";
   useEffect(()=>{
     
     const getConversation = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/`,
+        const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/${receiver}`,
           {
             method: "GET",
             headers: {
