@@ -49,13 +49,12 @@ class ApiConsumer(AsyncWebsocketConsumer):
         message = data.get("message")
         sender = data.get("sender")
         receiver = data.get("receiver")
-        print("#################### ", sender, receiver)
-        # test = await sync_to_async(customuser.objects.filter(id=user_id).first)()
+
         user1 = await sync_to_async (User.objects.filter(username=sender).first)()
         user2 = await sync_to_async (User.objects.filter(username=receiver).first)()
         # print("DATA : ", data)
-        print("#################### ", user1, user2)
-         # Save the message to the ChatConvo model
+
+        # Save the message to the ChatConvo model
         await self.save_message(user1, user2, message)
 
         await self.channel_layer.group_send(
@@ -63,7 +62,7 @@ class ApiConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message', #Message Routing: broadcasts the message to all consumers instances in the specified group.
                 # 'sender': sender,
-                # 'message': message
+                'message': message
             }
         )
         # await self.send(text_data=json.dumps({
@@ -73,12 +72,12 @@ class ApiConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event): #Message Routing
         # sender = event.get('sender')
-        # message = event.get('message')
+        message = event.get('message')
         await self.send(text_data=json.dumps({
-            'type': 'chat',
+            'type': 'new_message',
             # 'sender': sender,
             # 'message': message
-            'message': "message 3ndk f DB"
+            'message': message
             }))
     
     async def save_message(self, sender, receiver, message):

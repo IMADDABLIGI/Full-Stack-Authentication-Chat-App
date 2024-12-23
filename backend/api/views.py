@@ -84,3 +84,11 @@ def check_token(request):
             return Response(data={"error": "Invalid refresh token."}, status=status.HTTP_401_UNAUTHORIZED)
             
     return Response(data={"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["GET"])
+def get_conversation(request, username):
+    user = User.objects.filter(username=username).first()
+    if not user:
+        return Response(error={"error", "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    return Response(data={"data": "User Found"}, status=status.HTTP_200_OK)
