@@ -5,8 +5,8 @@ import SideBar from "../sidebar/SideBar";
 import ChatLayout from "../chat/ChatLayout";
 
 function Home() {
-  const { socket, setSocket, messages, user } = useContext(ProfileContext);
-  const navigate = useNavigate();
+  // const { socket, setSocket, messages, user } = useContext(ProfileContext);
+  // const navigate = useNavigate();
 
   // const createSocket = (message) => {
   //   const userSocket = new WebSocket("ws://127.0.0.1:8000/ws/api/");
@@ -24,22 +24,22 @@ function Home() {
   //     console.log("Message from server:", data.message);
   //   };
   // };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const message = e.target.message.value;
-    if (message) {
-      if (!socket)
-        navigate("/signin");
-      else
-        socket.send(
-          JSON.stringify({
-            sender: user,
-            message: message,
-          }),
-        );
-    }
-    e.target.reset();
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const message = e.target.message.value;
+  //   if (message) {
+  //     if (!socket)
+  //       navigate("/signin");
+  //     else
+  //       socket.send(
+  //         JSON.stringify({
+  //           sender: user,
+  //           message: message,
+  //         }),
+  //       );
+  //   }
+  //   e.target.reset();
+  // };
 
 
   return (

@@ -19,11 +19,6 @@ function Login() {
     userSocket.onopen = function () {
       console.log('WebSocket connection established');
       setSocket(userSocket);
-      // userSocket.send(JSON.stringify({ message: 'Hello' }));
-    };
-    userSocket.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      console.log("Message from server:", data.message);
     };
   };
 

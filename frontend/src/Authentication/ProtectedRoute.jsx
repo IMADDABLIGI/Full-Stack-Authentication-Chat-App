@@ -1,8 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import api from "../api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
 const ProfileContext = createContext();
 
@@ -11,18 +9,17 @@ export default ProfileContext;
 export const ProtectedRoute = ({ child }) => {
   const [user, setUser] = useState(null);
   const [socket, setSocket] = useState(null);
-  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (socket) {
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        console.log(data.sender, ":", data.message);
-        // setMessages((prevMsg) => [...prevMsg, data]); //to use the most recent value of messages bcs useEffect may result in outdated values.
-      };
-    }
-  }, [socket]);
+  // useEffect(() => {
+  //   if (socket && socket.readyState === WebSocket.OPEN) {
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data);
+  //       if (data.type === "new_message")
+  //         console.log("Mesage :", data.message);
+  //     };
+  //   }
+  // }, [socket]);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -64,8 +61,6 @@ export const ProtectedRoute = ({ child }) => {
     setUser,
     socket,
     setSocket,
-    messages,
-    setMessages,
   };
 
   return (
