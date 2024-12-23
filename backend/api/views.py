@@ -13,6 +13,8 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError, AccessToken
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from .models import ChatConvo
+from django.db.models import Q
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all        # Specifie a list of all the different object that will be looking at when creating a new one to make sure not to create a user that already exsiste
@@ -87,8 +89,24 @@ def check_token(request):
 
 
 @api_view(["GET"])
-def get_conversation(request, username):
-    user = User.objects.filter(username=username).first()
+def get_conversation(request, sender, receiver):
+    user = User.objects.filter(username=sender).first()
+    user2 = User.objects.filter(username=receiver).first()
+    res_data = []
     if not user:
         return Response(error={"error", "User not found"}, status=status.HTTP_404_NOT_FOUND)
-    return Response(data={"data": "User Found"}, status=status.HTTP_200_OK)
+    convos = ChatConvo.objects.filter((Q(sender=user) & Q(receiver=user2)) | (Q(sender=user2) & Q(receiver=user))
+    ).order_by('-timestamp')
+    if convos:
+        for convo in convos:
+            res_data.append(
+                {
+                    "sender": convo.sender.username,
+                    "receiver": convo.receiver.username,
+                    "time": convo.timestamp.strftime("%H:%M"),
+                    "message": convo.message
+                }
+            )
+        print("#####", res_data)
+
+    return Response(data={"data": res_data}, status=status.HTTP_200_OK)
