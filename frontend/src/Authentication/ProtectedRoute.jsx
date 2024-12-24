@@ -11,16 +11,17 @@ export const ProtectedRoute = ({ child }) => {
   const [socket, setSocket] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      // console.log("Protected Route");
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === "new_message")
-          console.log("Mesage :", data.message);
-      };
-    }
-  }, [socket]);
+  // useEffect(() => {
+  //   console.log("change in socket in Profile Context");
+  //   if (socket && socket.readyState === WebSocket.OPEN) {
+  //     console.log("Protected Route");
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data);
+  //       if (data.type === "new_message")
+  //         console.log("Mesage :", data.message);
+  //     };
+  //   }
+  // }, [socket]);
 
   useEffect(() => {
     const checkToken = async () => {
