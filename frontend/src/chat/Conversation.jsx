@@ -11,23 +11,24 @@ function Conversation(props) {
   const [messages, setMessages] = useState([]);
   
   const getConversation = async () => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/${receiver}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+    if(info.userName === "Imad" || info.userName === "Simo"){
+      try {
+        const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/${receiver}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      )
+      if (response.ok){
+        const resData = await response.json();
+        setMessages(resData.data);
       }
-    )
-    if (response.ok){
-      const resData = await response.json();
-      console.log("DATA :", resData.data);
-      setMessages(resData.data);
+    } catch (error) {
+      alert(error)
     }
-  } catch (error) {
-    alert(error)
   }
   }
   useEffect(()=> {
@@ -39,11 +40,9 @@ function Conversation(props) {
         const data = JSON.parse(event.data);
         if (data.type === "new_message"){
           getConversation()
-          // console.log("Message in Socket :", data.message);
         }
       }
     }
-    console.log("change in socket in child");
   },[socket])
   
   const senderStyle = "self-end text-white bg-primary px-5 py-1 rounded-2xl text-[20px]"

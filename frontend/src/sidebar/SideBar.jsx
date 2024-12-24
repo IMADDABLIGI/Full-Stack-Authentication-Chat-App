@@ -23,25 +23,25 @@ function SideBar() {
     <div className="flex flex-col rounded-tr-[20px] bg-primary h-full w-[120px] items-center py-[20px]">
       <ViewWeekIcon className='text-white' style={svgStyles}/>
       <div 
-        className={`flexx py-[25px] ${selectedIcon === 'chat' ? selected : noSelected} mt-[120px] w-full`} 
+        className={`flexx py-[25px] ${selectedIcon === 'chat' ? selected : noSelected} mt-[120px] w-[101%]`} 
         onClick={() => handleIconClick('chat')}
       >
         <ChatIcon style={svgStyles} />
       </div>
       <div 
-        className={`flexx py-[25px] ${selectedIcon === 'call' ? selected : noSelected} w-full`} 
+        className={`flexx py-[25px] ${selectedIcon === 'call' ? selected : noSelected} w-[101%]`} 
         onClick={() => handleIconClick('call')}
       >
         <CallIcon style={svgStyles} />
       </div>
       <div 
-        className={`flexx py-[25px] ${selectedIcon === 'groups' ? selected : noSelected} w-full`} 
+        className={`flexx py-[25px] ${selectedIcon === 'groups' ? selected : noSelected} w-[101%]`} 
         onClick={() => handleIconClick('groups')}
       >
         <GroupsIcon style={svgStyles} />
       </div>
       <div 
-        className={`flexx py-[25px] ${selectedIcon === 'settings' ? selected : noSelected} w-full`} 
+        className={`flexx py-[25px] ${selectedIcon === 'settings' ? selected : noSelected} w-[101%]`} 
         onClick={() => handleIconClick('settings')}
       >
         <SettingsIcon style={svgStyles} />

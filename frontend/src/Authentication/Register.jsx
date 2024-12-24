@@ -4,14 +4,26 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/Form.css";
 import bg4 from "../assets/bg-pictures/image.png";
 import glSvg from "../assets/bg-pictures/google.svg"
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 function Register() {
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return; // Prevent form submission if email is invalid
+    }
+
+    const userPart = username.split('@')[0];
+
     try {
       const response = await fetch("http://localhost:8000/api/user/register/",{
         method: "POST",
@@ -29,9 +41,10 @@ function Register() {
         navigate("/signin");
       }
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   };
+  
 
   return (
     <div
@@ -49,15 +62,16 @@ function Register() {
         <input
           className="w-[90%] p-[10px] mb-[10px] border border-gray-300 rounded-md "
           type="text"
-          onChange={(e) => {}}
+          value={username}
+          onChange={(e) => setUserName(e.target.value)}
           autoFocus
           />
         <h3 className="ml-[20px] self-start text-md text-gray-500 "> Email address </h3>
         <input
           className="w-[90%] p-[10px] mb-[10px] border border-gray-300 rounded-md "
-          type="text"
-          value={username}
-          onChange={(e) => setUserName(e.target.value)}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           />
         <h3 className="ml-[20px] self-start text-md text-gray-500 "> Password </h3>
         <input

@@ -99,11 +99,12 @@ def get_conversation(request, sender, receiver):
     ).order_by('-timestamp')
     if convos:
         for convo in convos:
+            local_time = timezone.localtime(convo.timestamp)
             res_data.append(
                 {
                     "sender": convo.sender.username,
                     "receiver": convo.receiver.username,
-                    "time": convo.timestamp.strftime("%H:%M"),
+                    "time": local_time.strftime("%H:%M"),
                     "message": convo.message
                 }
             )
@@ -116,12 +117,14 @@ def get_conversation(request, sender, receiver):
 def get__last_convo(request, sender, receiver):
     user = User.objects.filter(username=sender).first()
     user2 = User.objects.filter(username=receiver).first()
+    
     res_data = []
     if not user or not user2:
         return Response(error={"error", "User not found"}, status=status.HTTP_404_NOT_FOUND)
     convo = ChatConvo.objects.filter( (Q(sender=user) & Q(receiver=user2)) | (Q(sender=user2) & Q(receiver=user)) ).last()
+    local_time = timezone.localtime(convo.timestamp)
     res_data = {
         "message" : convo.message,
-        "time" : convo.timestamp.strftime("%H:%M"),
+        "time" : local_time.strftime("%H:%M"),
     }
     return Response(data={"data": res_data}, status=status.HTTP_200_OK)

@@ -10,6 +10,7 @@ import Register from "./Authentication/Register";
 import Home from "./home/Home";
 import NotFound from "./home/NotFound";
 import "./index.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Logout() {
   // localStorage.clear()

@@ -6,6 +6,8 @@ import "../styles/Form.css";
 import ProfileContext from "./ProtectedRoute";
 import bg4 from "../assets/bg-pictures/image.png";
 import glSvg from "../assets/bg-pictures/google.svg"
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 function Login() {
   const { setSocket } = useContext(ProfileContext);
@@ -13,6 +15,8 @@ function Login() {
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  
+  const notifyErr = (err) => toast.error(err);
 
   const createSocket = () => {
     const userSocket = new WebSocket("ws://localhost:8000/ws/api/");
@@ -24,6 +28,17 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailPattern.test(username)) {
+    //   toast.error("Please enter a valid email address.");
+    //   return; // Prevent form submission if email is invalid
+    // }
+
+    
+    // Extract username (part before the @)
+    // const userPart = username.split('@')[0];
+    
     try {
       const res = await fetch("http://localhost:8000/api/token/", {
         method: "POST",
@@ -42,8 +57,10 @@ function Login() {
         createSocket();
         navigate("/");
       }
-    } catch (err) {
-      alert(err);
+      else
+      toast.error("User Not Found");
+  } catch (err) {
+      toast.error("User Not Found");
     }
   };
 
@@ -52,6 +69,7 @@ function Login() {
       className="flex h-[100svh] items-center justify-center bg-center bg-cover"
       style={{ backgroundImage: `url(${bg4})` }}
     >
+      <ToastContainer />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col items-center w-[380px] rounded-[10px] border border-gray-300 bg-gray-300 bg-opacity-50 px-[25px] py-[20px] shadow-xl"
@@ -59,7 +77,7 @@ function Login() {
         <h1 className="ml-[20px] self-start text-xl font-bold mb-1"> Welcome Back </h1>
         <h3 className="ml-[20px] self-start text-md mb-6 text-gray-500 "> Please enter your details </h3>
 
-        <h3 className="ml-[20px] self-start text-md text-gray-500 "> Email address </h3>
+        <h3 className="ml-[20px] self-start text-md text-gray-500 "> Email address or username </h3>
         <input
           className="w-[90%] p-[10px] mb-[10px] border border-gray-300 rounded-md focus:border-red-600 transition-colors"
           type="text"

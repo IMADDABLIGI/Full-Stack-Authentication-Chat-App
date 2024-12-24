@@ -8,8 +8,8 @@ function ConvoBox(props) {
   const receiver = user === "Imad" ? "Simo" : "Imad";
   // const [cases, setCase] = useState(false);
   const cases = receiver === "Imad" || receiver === "Simo";
-  const [time, setTime] = useState("00:00");
-  const [lmsg, setLmsg] = useState("Great");
+  const [time, setTime] = useState("");
+  const [lmsg, setLmsg] = useState("");
 
   useEffect(()=>{
     const get_last_convo = async () => {
