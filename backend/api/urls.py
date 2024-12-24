@@ -7,6 +7,6 @@ urlpatterns = [
     path("token/", CustomTokenObtainPairView.as_view(), name="get_token"),
     path("token/checktoken/", check_token, name="check_token"),
     path("get_conversation/<str:sender>/<str:receiver>/", get_conversation, name="get_convo"),
-    path("get__last_convo/<str:sender>/<str:receiver>/", get__last_convo, name="get_last_convo"),
+    path("get__last_convo/<str:sender>/<str:receiver>/", get__last_convo, name="get_lconvo"),
 ]
 
