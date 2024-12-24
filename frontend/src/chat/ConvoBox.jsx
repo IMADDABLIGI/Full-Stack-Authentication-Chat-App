@@ -37,7 +37,7 @@ function ConvoBox(props) {
   },[user])
 
   return (
-    <div className={`flex items-center mt-[0px] h-[100px] w-full pl-5 gap-[25px] relative  ${isSelected && "bg-gray-100 border-r-4 border-r-gray-300" } `} onClick={onSelect}>
+    <div className={`flex items-center mt-[0px] h-[100px] w-full pl-5 gap-[25px] relative  ${isSelected && "bg-gray-100 border-r-4 border-r-[#008E9B]" } `} onClick={onSelect}>
         <img src={info.avatar} className='ml-0' style={{width: "75px", height: "75px"}}/>
         <div className='flex flex-col justify-center'>
             <h2 className='text-primary text-xl font-bold'> {info.userName} </h2>

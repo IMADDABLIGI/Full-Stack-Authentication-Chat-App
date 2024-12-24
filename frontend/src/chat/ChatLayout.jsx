@@ -51,7 +51,7 @@ function ChatLayout() {
 
   return (
     <div className="flex h-full w-full">
-        <div className="flex flex-col w-[30%] pt-[70px] shadow-right">
+        <div className="flex flex-col w-[30%] pt-[70px] ">
           <h1 className='text-primary text-4xl font-bold ml-[50px]'> Inbox </h1>
           <SearchBar />
           {users.map((user, key)=> {

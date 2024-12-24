@@ -8,7 +8,7 @@ function ConvoHeader(props) {
   const iconStyles = {height:"55px", width:"55px"};
 
   return (
-    <div className='flex justify-between h-[85px] pl-[50px] pr-[20px] shadow-bottom'>
+    <div className='flex justify-between h-[85px] pl-[50px] pr-[20px] border-b-[3px] border-b-[#008E9B]'>
       <div className='flex items-center gap-3'>
         <img src={info.avatar} style={iconStyles} />
         <div className='flex flex-col'>

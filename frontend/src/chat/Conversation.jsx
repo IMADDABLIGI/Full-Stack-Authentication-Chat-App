@@ -49,10 +49,10 @@ function Conversation(props) {
   const receiverStyle = "self-start text-primary bg-white px-5 py-1 rounded-2xl text-[20px]"
   
   return (
-    <div className="flex flex-col w-[70%] h-[100%] justify-center shadow-left ">
+    <div className="flex flex-col w-[70%] h-[100%] justify-center shadow-left gap">
       <ConvoHeader info={info}/>
       <div className='flex justify-center bg-[#E9FDFF] relative h-[100%] w-[100%] pt-5'>
-        <div className='flex flex-col-reverse h-[83.4%] w-[90%] self-end gap-2 overflow-y-auto absolute bottom-[16%]'>
+        <div className='flex flex-col-reverse h-[82.3%] w-[90%] self-end gap-2 overflow-y-auto absolute bottom-[16%]'>
           {messages.map((message, key)=>{
             if (message.sender === user)
               return(

@@ -82,7 +82,7 @@ function Register() {
           />
 
         <button className="w-[90%] p-[10px] mt-[25px] bg-primary rounded-md text-white text-[14px] font-bold" type="submit">
-            Sign in
+            Sign up
         </button>
         <div className="w-[90%] p-[10px] mt-[10px] flex border border-primary rounded-md items-center justify-center gap-2 bg-gray-400 bg-opacity-35" type="submit">
           <img src={glSvg} className="w-[18px] h-[18px]"/>
