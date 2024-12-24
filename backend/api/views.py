@@ -93,7 +93,7 @@ def get_conversation(request, sender, receiver):
     user = User.objects.filter(username=sender).first()
     user2 = User.objects.filter(username=receiver).first()
     res_data = []
-    if not user:
+    if not user or not user2:
         return Response(error={"error", "User not found"}, status=status.HTTP_404_NOT_FOUND)
     convos = ChatConvo.objects.filter((Q(sender=user) & Q(receiver=user2)) | (Q(sender=user2) & Q(receiver=user))
     ).order_by('-timestamp')
@@ -107,6 +107,21 @@ def get_conversation(request, sender, receiver):
                     "message": convo.message
                 }
             )
-        print("#####", res_data)
+        # print("#####", res_data)
 
+    return Response(data={"data": res_data}, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get__last_convo(request, sender, receiver):
+    user = User.objects.filter(username=sender).first()
+    user2 = User.objects.filter(username=receiver).first()
+    res_data = []
+    if not user or not user2:
+        return Response(error={"error", "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    convo = ChatConvo.objects.filter( (Q(sender=user) & Q(receiver=user2)) | (Q(sender=user2) & Q(receiver=user)) ).last()
+    res_data = {
+        "message" : convo.message,
+        "time" : convo.timestamp.strftime("%H:%M"),
+    }
     return Response(data={"data": res_data}, status=status.HTTP_200_OK)
