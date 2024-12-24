@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProfileContext from '../Authentication/ProtectedRoute';
 import { useNavigate } from 'react-router-dom';
 import ConvoHeader from './ConvoHeader';
@@ -6,50 +6,71 @@ import ConvoSubmit from './ConvoSubmit';
 
 function Conversation(props) {
   const {info} = props;
-  const msgStyle = "self-end text-white bg-primary px-4 py-1 rounded-2xl text-xl"
-  const msgStyle2 = "self-start text-primary bg-white px-4 py-1 rounded-2xl text-xl"
   const {socket, user} = useContext(ProfileContext);
   const receiver = user === "Imad" ? "Simo": "Imad";
-  useEffect(()=>{
-    
-    const getConversation = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/${receiver}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        )
-        if (response.ok){
-          const resData = await response.json();
-          // console.log("DATA :", resData.data);
-        }
-      } catch (error) {
-        alert(error)
+  const [messages, setMessages] = useState([]);
+  
+  const getConversation = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/get_conversation/${user}/${receiver}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
       }
+    )
+    if (response.ok){
+      const resData = await response.json();
+      console.log("DATA :", resData.data);
+      setMessages(resData.data);
     }
+  } catch (error) {
+    alert(error)
+  }
+  }
+  useEffect(()=> {
+    getConversation();
+  },[])
+  useEffect(()=>{
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.type === "new_message"){
           getConversation()
-          console.log("Message in Socket :", data.message);
+          // console.log("Message in Socket :", data.message);
         }
       }
     }
+    console.log("change in socket in child");
   },[socket])
-
-
+  
+  const senderStyle = "self-end text-white bg-primary px-5 py-1 rounded-2xl text-[20px]"
+  const receiverStyle = "self-start text-primary bg-white px-5 py-1 rounded-2xl text-[20px]"
+  
   return (
-    <div className="flex flex-col border-[2px] border-gray-300 w-[70%] gap-1 justify-center">
+    <div className="flex flex-col w-[70%] h-[100%] justify-center shadow-left ">
       <ConvoHeader info={info}/>
-      <div className='flex justify-center bg-[#E9FDFF] h-full relative w-[100%] pt-5'>
-        <div className='flex flex-col h-[82%] w-[90%] border border-gray-400 justify-end gap-2'>
-          <p className={`${msgStyle}`}> Hi </p>
-          <p className={`${msgStyle2}`}> Hi, how are u doing </p>
+      <div className='flex justify-center bg-[#E9FDFF] relative h-[100%] w-[100%] pt-5'>
+        <div className='flex flex-col-reverse h-[83.4%] w-[90%] self-end gap-2 overflow-y-auto absolute bottom-[16%]'>
+          {messages.map((message, key)=>{
+            if (message.sender === user)
+              return(
+                <div className='flex items-center gap-3 self-end' key={key}>
+                  <p className='text-gray-300 text-[14px]'> {message.time} </p>
+                  <p className={`${senderStyle}`} > {message.message} </p>
+                </div>
+              )
+            else
+              return (
+                <div className='flex items-center gap-3 self-start' key={key}>
+                  <p className={`${receiverStyle}`}> {message.message} </p>
+                  <p className='text-gray-300 text-[14px]'> {message.time} </p>
+                </div>
+              )
+          })}
+
         </div>
 
         <ConvoSubmit />

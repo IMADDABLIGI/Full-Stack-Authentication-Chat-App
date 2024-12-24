@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Conversation from './Conversation'
 import SearchIcon from '@mui/icons-material/Search';
 import SearchBar from './helpers/SearchBar';
@@ -10,6 +10,7 @@ import avatar3 from "../assets/bg-pictures/user4.png"
 import avatar4 from "../assets/bg-pictures/user5.png"
 import { useState } from 'react';
 import ProfileContext from '../Authentication/ProtectedRoute';
+import EmptyCono from './EmptyCono';
 
 function ChatLayout() {
 
@@ -19,14 +20,14 @@ function ChatLayout() {
     userName: "Imad",
     recentText: "Where ?",
     avatar: avatar2,
-    messagesCount: 2,
+    messagesCount: 0,
     time: "17:47",
   }
   const user2 = {
     userName: "Simo",
     recentText: "ok",
     avatar: avatar,
-    messagesCount: 1,
+    messagesCount: 0,
     time: "17:45",
   }
   const user3 = {
@@ -47,6 +48,7 @@ function ChatLayout() {
   const users = user === "Imad" ? [user2, user3, user4] : [user1, user3, user4];
   const [selectedUser, setSelectedUser] = useState(null);
 
+
   return (
     <div className="flex h-full w-full">
         <div className="flex flex-col w-[30%] pt-[70px] shadow-right">
@@ -62,11 +64,25 @@ function ChatLayout() {
               />
             )
           })}
-
+            {/* <ConvoBox
+                info={userReceive}
+                isSelected={selectedUser && selectedUser.userName === userReceive.userName}
+                onSelect={()=>setSelectedUser(userReceive)}
+              />
+              <ConvoBox
+                info={user3}
+                isSelected={selectedUser && selectedUser.userName === user3.userName}
+                onSelect={()=>setSelectedUser(user3)}
+              />
+              <ConvoBox
+                info={user4}
+                isSelected={selectedUser && selectedUser.userName === user4.userName}
+                onSelect={()=>setSelectedUser(user4)}
+              /> */}
 
         </div>
-        {selectedUser && 
-          <Conversation info={selectedUser}/>
+        {selectedUser ?
+          <Conversation info={selectedUser}/> : <EmptyCono />
         }
     </div>
   )

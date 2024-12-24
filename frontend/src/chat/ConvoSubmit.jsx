@@ -44,7 +44,7 @@ const handleSubmit = (e) => {
 };
 
     return (
-        <form onSubmit={handleSubmit} className="flex items-center absolute h-[70px] w-[90%] shadow-lg rounded-2xl border bottom-20 left-1/2 transform -translate-x-1/2 px-6 bg-white gap-5">
+        <form onSubmit={handleSubmit} className="flex items-center absolute h-[70px] w-[90%] shadow-lg rounded-2xl border bottom-10 left-1/2 transform -translate-x-1/2 px-6 bg-white gap-5">
         <CollectionsIcon style={iconStyles} className=' text-primary '/>
         <EmojiEmotionsIcon style={iconStyles} className=' text-primary '/>
         <input 

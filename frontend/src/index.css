@@ -12,3 +12,27 @@
 .shadow-bottom {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
   }
+
+  .shadow-left {
+    box-shadow: -3px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+
+@keyframes borderAnimation {
+    0% {
+      border-color: rgba(0, 174, 255, 0.5);
+    }
+    50% {
+      border-color: rgba(0, 174, 255, 1);
+    }
+    100% {
+      border-color: rgba(0, 174, 255, 0.5);
+    }
+  }
+  
+  .animated-border {
+    animation: borderAnimation 2s infinite;
+    border-width: 4px; /* Increased border width */
+    border-style: solid;
+    border-image: linear-gradient(90deg, rgba(0, 174, 255, 0.5), rgba(0, 174, 255, 0.8), rgba(0, 174, 255, 0.5)) 1;
+  }
