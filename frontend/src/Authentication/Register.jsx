@@ -93,7 +93,7 @@ function Register() {
 
         <div className="flex justify-center gap-2 mt-5">
           <p className="text-md text-gray-500"> Already have an account? </p>
-          <Link to="/signin" className="text-md text-primary border-b-[.7px] border-primary pb-0"> Sign up </Link>
+          <Link to="/signin" className="text-md text-primary border-b-[.7px] border-primary pb-0"> Sign in </Link>
         </div>
 
       </form>
